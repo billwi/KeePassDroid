@@ -42,7 +42,7 @@ public class ClipDataCompat {
             clipData = Class.forName("android.content.ClipData");
             getDescription = clipData.getMethod("getDescription", (Class[])null);
             getItemCount = clipData.getMethod("getItemCount", (Class[])null);
-            getItemAt = clipData.getMethod("getItemAt", new Class[]{int.class});
+            getItemAt = clipData.getMethod("getItemAt", int.class);
             clipDescription = Class.forName("android.content.ClipDescription");
             getLabel = clipDescription.getMethod("getLabel", (Class[])null);
 

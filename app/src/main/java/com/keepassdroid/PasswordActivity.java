@@ -19,17 +19,14 @@
  */
 package com.keepassdroid;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
-import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -96,6 +93,7 @@ public class PasswordActivity extends LockingActivity {
         }
 
         Uri uri = UriUtil.parseDefaultFile(fileName);
+        assert uri != null;
         String scheme = uri.getScheme();
 
         if (!EmptyUtils.isNullOrEmpty(scheme) && scheme.equalsIgnoreCase("file")) {
@@ -120,13 +118,13 @@ public class PasswordActivity extends LockingActivity {
         switch (requestCode) {
 
         case KeePass.EXIT_NORMAL:
-            setEditText(R.id.password, "");
+            setEditText(R.id.password);
             App.getDB().clear();
             break;
 
         case KeePass.EXIT_LOCK:
             setResult(KeePass.EXIT_LOCK);
-            setEditText(R.id.password, "");
+            setEditText(R.id.password);
             finish();
             App.getDB().clear();
             break;
@@ -210,10 +208,10 @@ public class PasswordActivity extends LockingActivity {
 
     private void populateView() {
         String db = (mDbUri == null) ? "" : mDbUri.toString();
-        setEditText(R.id.filename, db);
+        setEditText(R.id.filename);
 
         String key = (mKeyUri == null) ? "" : mKeyUri.toString();
-        setEditText(R.id.pass_keyfile, key);
+        setEditText(R.id.pass_keyfile);
     }
 
     /*
@@ -290,13 +288,9 @@ public class PasswordActivity extends LockingActivity {
         return Util.getEditText(this, resId);
     }
 
-    private void setEditText(int resId, String str) {
+    private void setEditText(int resId) {
         TextView te =  (TextView) findViewById(resId);
-        assert(te == null);
-
-        if (te != null) {
-            te.setText(str);
-        }
+        assert te == null;
     }
 
     @Override
@@ -328,7 +322,7 @@ public class PasswordActivity extends LockingActivity {
     private final class AfterLoad extends OnFinish {
         private Database db;
 
-        public AfterLoad(Handler handler, Database db) {
+        AfterLoad(Handler handler, Database db) {
             super(handler);
 
             this.db = db;
@@ -361,7 +355,7 @@ public class PasswordActivity extends LockingActivity {
         @Override
         protected Integer doInBackground(Intent... args) {
             Intent i = args[0];
-            String action = i.getAction();;
+            String action = i.getAction();
             if ( action != null && action.equals(VIEW_INTENT) ) {
                 Uri incoming = i.getData();
                 mDbUri = incoming;

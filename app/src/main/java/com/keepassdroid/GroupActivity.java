@@ -53,8 +53,6 @@ import com.keepassdroid.view.GroupViewOnlyView;
 
 public abstract class GroupActivity extends GroupBaseActivity {
 	
-	public static final int UNINIT = -1;
-	
 	protected boolean addGroupEnabled = false;
 	protected boolean addEntryEnabled = false;
 	protected boolean isRoot = false;
@@ -149,7 +147,7 @@ public abstract class GroupActivity extends GroupBaseActivity {
 
 		if ( addGroupEnabled ) {
 			// Add Group button
-			Button addGroup = (Button) findViewById(R.id.add_group);
+			com.github.clans.fab.FloatingActionButton addGroup = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.add_group);
 			addGroup.setOnClickListener(new View.OnClickListener() {
 
 				public void onClick(View v) {
@@ -160,7 +158,7 @@ public abstract class GroupActivity extends GroupBaseActivity {
 		
 		if ( addEntryEnabled ) {
 			// Add Entry button
-			Button addEntry = (Button) findViewById(R.id.add_entry);
+			com.github.clans.fab.FloatingActionButton addEntry = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.add_entry);
 			addEntry.setOnClickListener(new View.OnClickListener() {
 	
 				public void onClick(View v) {

@@ -138,7 +138,7 @@ public abstract class EntryEditActivity extends LockCloseHideActivity {
 			
 		} else {
 			UUID uuid = Types.bytestoUUID(uuidBytes);
-			assert(uuid != null);
+			assert uuid != null;
 
 			mEntry = pm.entries.get(uuid);
 			mIsNew = false;
@@ -166,7 +166,7 @@ public abstract class EntryEditActivity extends LockCloseHideActivity {
 		});
 		
 		// Save button
-		Button save = (Button) findViewById(R.id.entry_save);
+		com.github.clans.fab.FloatingActionButton save = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.entry_save);
 		save.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View v) {
@@ -197,17 +197,7 @@ public abstract class EntryEditActivity extends LockCloseHideActivity {
 			}
 			
 		});
-		
-		// Cancel button
-		Button cancel = (Button) findViewById(R.id.entry_cancel);
-		cancel.setOnClickListener(new View.OnClickListener() {
 
-			public void onClick(View v) {
-				finish();
-				
-			}
-			
-		});
 		
 		// Respect mask password setting
 		if (mShowPassword) {
@@ -359,7 +349,7 @@ public abstract class EntryEditActivity extends LockCloseHideActivity {
 		populateText(R.id.entry_user_name, mEntry.getUsername());
 		populateText(R.id.entry_url, mEntry.getUrl());
 		
-		String password = new String(mEntry.getPassword());
+		String password = mEntry.getPassword();
 		populateText(R.id.entry_password, password);
 		populateText(R.id.entry_confpassword, password);
 		setPasswordStyle();
@@ -374,7 +364,7 @@ public abstract class EntryEditActivity extends LockCloseHideActivity {
 	
 	private final class AfterSave extends OnFinish {
 
-		public AfterSave(Handler handler) {
+		AfterSave(Handler handler) {
 			super(handler);
 		}
 

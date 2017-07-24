@@ -68,8 +68,8 @@ public class GeneratePasswordActivity extends LockCloseActivity {
 				fillPassword();
 			}
 		});
-        
-        Button acceptButton = (Button) findViewById(R.id.accept_button);
+
+		com.github.clans.fab.FloatingActionButton acceptButton = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.accept_button);
         acceptButton.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
@@ -79,16 +79,6 @@ public class GeneratePasswordActivity extends LockCloseActivity {
 				intent.putExtra("com.keepassdroid.password.generated_password", password.getText().toString());
 				
 				setResult(EntryEditActivity.RESULT_OK_PASSWORD_GENERATOR, intent);
-				
-				finish();
-			}
-		});
-        
-        Button cancelButton = (Button) findViewById(R.id.cancel_button);
-        cancelButton.setOnClickListener(new OnClickListener() {
-			
-			public void onClick(View v) {
-				setResult(RESULT_CANCELED);
 				
 				finish();
 			}

@@ -18,19 +18,28 @@
   along with KeePassDroid.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="fill_parent"
-  android:layout_height="wrap_content">
-	<Button android:id="@+id/entry_save"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	xmlns:fab="http://schemas.android.com/apk/res-auto">
+	<!--<Button android:id="@+id/entry_save"
       android:layout_width="wrap_content"
 	  android:layout_height="wrap_content"
 	  android:layout_alignParentBottom="true"
-	  android:text="@string/entry_save"/>
-	<Button android:id="@+id/entry_cancel"
-      android:layout_width="wrap_content"
-	  android:layout_height="wrap_content"
-	  android:layout_alignParentBottom="true"
-	  android:layout_toRightOf="@id/entry_save"
-	  android:text="@string/entry_cancel"/>
+	  android:text="@string/entry_save"/>-->
+	<com.github.clans.fab.FloatingActionButton
+		android:id="@+id/entry_save"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="bottom|right"
+		android:layout_marginBottom="8dp"
+		android:layout_marginRight="8dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+		android:src="@drawable/ic_save"
+		fab:fab_colorNormal="#BCBFC4"
+		fab:fab_colorPressed="#95979B"
+		fab:fab_colorRipple="#9C9EA3"/>
+
 	<View android:id="@+id/entry_divider"
 	  android:layout_above="@id/entry_save"
 	  android:scaleType="fitXY"
@@ -53,13 +62,16 @@
 			  android:src="@drawable/ic00"
 			  android:layout_alignParentRight="true"
 			  android:layout_below="@id/entry_title_label"/>
-			<EditText android:id="@+id/entry_title" 
-			  android:layout_width="fill_parent"
-			  android:layout_height="wrap_content"
-			  android:layout_toLeftOf="@+id/icon_button"
-			  android:singleLine="true"
-			  android:layout_below="@id/entry_title_label"
-			  android:hint="@string/hint_title"/>
+
+			<EditText
+				android:id="@+id/entry_title"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:layout_below="@id/entry_title_label"
+				android:layout_toLeftOf="@+id/icon_button"
+				android:fontFamily="sans-serif"
+				android:hint="@string/hint_title"
+				android:singleLine="true" />
 			<View android:id="@+id/divider_title"
 			  android:layout_below="@id/icon_button"
 			  android:layout_marginTop="6dp"
@@ -176,7 +188,7 @@
 			  android:src="@android:drawable/ic_input_add"
 			  android:scaleType="centerCrop"
 			  android:visibility="gone"
-			/>    
+			/>
 		</RelativeLayout>
 	</com.keepassdroid.view.NoFocusScrollView>
 </RelativeLayout>

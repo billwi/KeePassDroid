@@ -43,4 +43,8 @@
         android:title="@string/menu_copy_pass"
         android:showAsAction="ifRoom"
     />
+    <item android:id="@+id/menu_send_noti"
+        android:title="@string/menu_send_noti"
+        android:showAsAction="ifRoom"
+     />
 </menu>

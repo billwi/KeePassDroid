@@ -24,22 +24,20 @@ import java.lang.reflect.Field;
 import android.os.Build;
 
 public class BuildCompat {
-	private static Field manufacturer;
 	private static String manuText;
 	
 	public static final int VERSION_CODE_GINGERBREAD = 9;
 	public static final int VERSION_CODE_ICE_CREAM_SANDWICH = 14;
-	public static final int VERSION_CODE_JELLY_BEAN = 16;
-	public static final int VERSION_CODE_JELLY_BEAN_MR2 = 18;
+	static final int VERSION_CODE_JELLY_BEAN = 16;
+	static final int VERSION_CODE_JELLY_BEAN_MR2 = 18;
 	public static final int VERSION_KITKAT = 19;
 
-	private static Field versionSDK;
 	private static int versionInt;
 	
 	static {
 		// MANUFACTURER is only available in API version 4 and later
 		try {
-			manufacturer = Build.class.getField("MANUFACTURER");
+			Field manufacturer = Build.class.getField("MANUFACTURER");
 			manuText = (String) manufacturer.get(null);
 		} catch (Exception e) {
 			manuText = "";
@@ -47,7 +45,7 @@ public class BuildCompat {
 		
 		// SDK is only available in API version 4 and later
 		try {
-			versionSDK = Build.VERSION.class.getField("SDK_INT");
+			Field versionSDK = Build.VERSION.class.getField("SDK_INT");
 			versionInt = versionSDK.getInt(null);
 		} catch (Exception e) {
 			try {
@@ -58,7 +56,7 @@ public class BuildCompat {
 		}
 	}
 	
-	public static String getManufacturer() {
+	static String getManufacturer() {
 		return manuText;
 	}
 	

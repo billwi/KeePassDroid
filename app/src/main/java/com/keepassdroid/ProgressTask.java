@@ -68,7 +68,7 @@ public class ProgressTask implements Runnable {
 	
 	private class AfterTask extends OnFinish {
 		
-		public AfterTask(OnFinish finish, Handler handler) {
+		AfterTask(OnFinish finish, Handler handler) {
 			super(finish, handler);
 		}
 

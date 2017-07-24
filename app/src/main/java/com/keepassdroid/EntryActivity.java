@@ -20,12 +20,6 @@
  */
 package com.keepassdroid;
 
-import java.text.DateFormat;
-import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.UUID;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Notification;
@@ -41,6 +35,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.v7.app.NotificationCompat;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.method.PasswordTransformationMethod;
@@ -49,7 +44,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -67,12 +61,19 @@ import com.keepassdroid.utils.EmptyUtils;
 import com.keepassdroid.utils.Types;
 import com.keepassdroid.utils.Util;
 
+import java.text.DateFormat;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.UUID;
+
 public class EntryActivity extends LockCloseHideActivity {
 	public static final String KEY_ENTRY = "entry";
 	public static final String KEY_REFRESH_POS = "refresh_pos";
 
-	public static final int NOTIFY_USERNAME = 1;
-	public static final int NOTIFY_PASSWORD = 2;
+    protected static String USERNAME = "";
+    protected static String PASSWORD = "";
+    protected static int NOTIFICATION_ID = 0;
 	
 	public static void Launch(Activity act, PwEntry pw, int pos) {
 		Intent i;
@@ -105,7 +106,7 @@ public class EntryActivity extends LockCloseHideActivity {
 	}
 	
 	protected void setupEditButtons() {
-		Button edit = (Button) findViewById(R.id.entry_edit);
+		com.github.clans.fab.FloatingActionButton edit = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.entry_edit);
 		edit.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View v) {
@@ -147,7 +148,7 @@ public class EntryActivity extends LockCloseHideActivity {
 		Intent i = getIntent();
 		UUID uuid = Types.bytestoUUID(i.getByteArrayExtra(KEY_ENTRY));
 		mPos = i.getIntExtra(KEY_REFRESH_POS, -1);
-		assert(uuid != null);
+		assert uuid != null;
 		
 		mEntry = db.pm.entries.get(uuid);
 		if (mEntry == null) {
@@ -168,18 +169,6 @@ public class EntryActivity extends LockCloseHideActivity {
 		
 		// Notification Manager
 		mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		
-		if ( mEntry.getPassword().length() > 0 ) {
-			// only show notification if password is available
-			Notification password = getNotification(Intents.COPY_PASSWORD, R.string.copy_password);
-			mNM.notify(NOTIFY_PASSWORD, password);
-		}
-		
-		if ( mEntry.getUsername().length() > 0 ) {
-			// only show notification if username is available
-			Notification username = getNotification(Intents.COPY_USERNAME, R.string.copy_username);
-			mNM.notify(NOTIFY_USERNAME, username);
-		}
 			
 		mIntentReceiver = new BroadcastReceiver() {
 			
@@ -193,9 +182,9 @@ public class EntryActivity extends LockCloseHideActivity {
 						timeoutCopyToClipboard(username);
 					}
 				} else if ( action.equals(Intents.COPY_PASSWORD) ) {
-					String password = new String(mEntry.getPassword());
+					String password = mEntry.getPassword();
 					if ( password.length() > 0 ) {
-						timeoutCopyToClipboard(new String(mEntry.getPassword()));
+						timeoutCopyToClipboard(mEntry.getPassword());
 					}
 				}
 			}
@@ -224,18 +213,6 @@ public class EntryActivity extends LockCloseHideActivity {
 		}
 		
 		super.onDestroy();
-	}
-
-	private Notification getNotification(String intentText, int descResId) {
-		String desc = getString(descResId);
-		Notification notify = new Notification(R.drawable.notify, desc, System.currentTimeMillis());
-		
-		Intent intent = new Intent(intentText);
-		PendingIntent pending = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-		
-		notify.setLatestEventInfo(this, getString(R.string.app_name), desc, pending);
-		
-		return notify;
 	}
 	
 	private String getDateTime(Date dt) {
@@ -311,6 +288,7 @@ public class EntryActivity extends LockCloseHideActivity {
 		MenuItem gotoUrl = menu.findItem(R.id.menu_goto_url);
 		MenuItem copyUser = menu.findItem(R.id.menu_copy_user);
 		MenuItem copyPass = menu.findItem(R.id.menu_copy_pass);
+		MenuItem sendNoti = menu.findItem(R.id.menu_send_noti);
 		
 		// In API >= 11 onCreateOptionsMenu may be called before onCreate completes
 		// so mEntry may not be set
@@ -318,6 +296,7 @@ public class EntryActivity extends LockCloseHideActivity {
 			gotoUrl.setVisible(false);
 			copyUser.setVisible(false);
 			copyPass.setVisible(false);
+			sendNoti.setVisible(false);
 		}
 		else {
 			String url = mEntry.getUrl();
@@ -328,10 +307,12 @@ public class EntryActivity extends LockCloseHideActivity {
 			if ( mEntry.getUsername().length() == 0 ) {
 				// disable button if username is not available
 				copyUser.setVisible(false);
+				sendNoti.setVisible(true);
 			}
 			if ( mEntry.getPassword().length() == 0 ) {
 				// disable button if password is not available
 				copyPass.setVisible(false);
+				sendNoti.setVisible(true);
 			}
 		}
 		
@@ -393,8 +374,41 @@ public class EntryActivity extends LockCloseHideActivity {
 			return true;
 			
 		case R.id.menu_copy_pass:
-			timeoutCopyToClipboard(new String(mEntry.getPassword(true, App.getDB().pm)));
+			timeoutCopyToClipboard(mEntry.getPassword(true, App.getDB().pm));
 			return true;
+        case R.id.menu_send_noti:
+            if (NOTIFICATION_ID == 0) {
+                NOTIFICATION_ID = (int) System.currentTimeMillis();
+            } else {
+                getApplicationContext();
+                NotificationManager notiCancel = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                notiCancel.cancel(NOTIFICATION_ID);
+            }
+
+            Intent usernameIntent = new Intent(getApplicationContext(), NotificationCopier.class);
+            usernameIntent.setAction(NotificationCopier.USERACTION);
+            USERNAME = mEntry.getUsername();
+            usernameIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            PendingIntent pendingUsernameIntent = PendingIntent.getService(getApplicationContext(), NOTIFICATION_ID, usernameIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            Intent passwordIntent = new Intent(getApplicationContext(), NotificationCopier.class);
+            passwordIntent.setAction(NotificationCopier.PASSACTION);
+            PASSWORD = mEntry.getPassword();
+            passwordIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            PendingIntent pendingPasswordIntent = PendingIntent.getService(getApplicationContext(), NOTIFICATION_ID, passwordIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            NotificationCompat.Builder notiCreate = new  NotificationCompat.Builder(getApplicationContext());
+            notiCreate.setSmallIcon(R.drawable.launcher);
+            notiCreate.setContentTitle(mEntry.getTitle());
+            notiCreate.setContentText("Send credentials to clipboard");
+            notiCreate.addAction(R.drawable.ic00, "Username", pendingUsernameIntent);
+            notiCreate.addAction(R.drawable.ic00, "Password", pendingPasswordIntent);
+            notiCreate.setPriority(Notification.PRIORITY_MAX);
+
+            NotificationManager notManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            notManager.notify(NOTIFICATION_ID, notiCreate.build());
+
+            return true;
 			
 		case R.id.menu_lock:
 			App.setShutdown();
@@ -429,7 +443,7 @@ public class EntryActivity extends LockCloseHideActivity {
 	final Handler uiThreadCallback = new Handler();
 
 	// Task which clears the clipboard, and sends a toast to the foreground.
-	private class ClearClipboardTask extends TimerTask {
+    private class ClearClipboardTask extends TimerTask {
 		
 		private final String mClearText;
 		private final Context mCtx;

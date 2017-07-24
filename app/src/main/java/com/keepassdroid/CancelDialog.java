@@ -22,21 +22,14 @@ package com.keepassdroid;
 import android.app.Dialog;
 import android.content.Context;
 
-public class CancelDialog extends Dialog {
+class CancelDialog extends Dialog {
 
-	private boolean mCanceled = false; 
-	
-	public CancelDialog(Context context) {
+	CancelDialog(Context context) {
 		super(context);
-	}
-	
-	public boolean canceled() {
-		return mCanceled;
 	}
 
 	@Override
 	public void cancel() {
 		super.cancel();
-		mCanceled = true;
 	}
 }

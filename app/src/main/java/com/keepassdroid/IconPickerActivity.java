@@ -69,11 +69,11 @@ public class IconPickerActivity extends LockCloseActivity
    	});
    }
    
-   public class ImageAdapter extends BaseAdapter
+   private class ImageAdapter extends BaseAdapter
    {
    	Context mContext;
 
-   	public ImageAdapter(Context c)
+   	ImageAdapter(Context c)
    	{
    		mContext = c;
    	}

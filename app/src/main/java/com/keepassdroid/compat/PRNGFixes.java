@@ -101,20 +101,17 @@ public final class PRNGFixes {
     
     private static boolean onSELinuxEnforce() {
     	try {
-	    	ProcessBuilder builder = new ProcessBuilder("getenforce");
-	    	builder.redirectErrorStream(true);
-	    	java.lang.Process process = builder.start();
-	    	BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-	    	process.waitFor();
-	    	
-	    	String output = reader.readLine();
-	    	
-	    	if (output == null) {
-	    		return false;
-	    	}
-	    	
-	    	return output.toLowerCase(Locale.US).startsWith("enforcing");
-    	} catch (Exception e) {
+            ProcessBuilder builder = new ProcessBuilder("getenforce");
+            builder.redirectErrorStream(true);
+            java.lang.Process process = builder.start();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            process.waitFor();
+
+            String output = reader.readLine();
+
+            return output != null && output.toLowerCase(Locale.US).startsWith("enforcing");
+
+        } catch (Exception e) {
     		return false;
     	}
     }
@@ -136,7 +133,7 @@ public final class PRNGFixes {
             // Mix in the device- and invocation-specific seed.
             Class.forName("org.apache.harmony.xnet.provider.jsse.NativeCrypto")
                     .getMethod("RAND_seed", byte[].class)
-                    .invoke(null, generateSeed());
+                    .invoke(null, (Object) generateSeed());
 
             // Mix output of Linux PRNG into OpenSSL's PRNG
             int bytesRead = (Integer) Class.forName(
@@ -209,7 +206,7 @@ public final class PRNGFixes {
      */
     private static class LinuxPRNGSecureRandomProvider extends Provider {
 
-        public LinuxPRNGSecureRandomProvider() {
+        LinuxPRNGSecureRandomProvider() {
             super("LinuxPRNG",
                     1.0,
                     "A Linux-specific random number provider that uses"
@@ -227,7 +224,7 @@ public final class PRNGFixes {
      * {@link SecureRandomSpi} which passes all requests to the Linux PRNG
      * ({@code /dev/urandom}).
      */
-    public static class LinuxPRNGSecureRandom extends SecureRandomSpi {
+    private static class LinuxPRNGSecureRandom extends SecureRandomSpi {
 
         /*
          * IMPLEMENTATION NOTE: Requests to generate bytes and to mix in a seed

@@ -45,7 +45,7 @@ public class StorageAF {
         }
     }
 
-    public static boolean supportsStorageFramework() { return BuildCompat.getSdkVersion() >= BuildCompat.VERSION_KITKAT; }
+    private static boolean supportsStorageFramework() { return BuildCompat.getSdkVersion() >= BuildCompat.VERSION_KITKAT; }
 
     public static boolean useStorageFramework(Context ctx) {
         if (!supportsStorageFramework()) { return false; }

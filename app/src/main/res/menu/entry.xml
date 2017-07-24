@@ -38,6 +38,10 @@
         android:icon="@android:drawable/ic_menu_agenda"
         android:title="@string/menu_copy_pass"
     />
+    <item android:id="@+id/menu_send_noti"
+        android:icon="@android:drawable/ic_menu_agenda"
+        android:title="@string/menu_send_noti"
+        />
     <item android:id="@+id/menu_lock"
         android:icon="@android:drawable/ic_lock_lock"
         android:title="@string/menu_lock"

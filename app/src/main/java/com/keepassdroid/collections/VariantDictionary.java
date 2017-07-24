@@ -22,16 +22,14 @@ package com.keepassdroid.collections;
 import com.keepassdroid.stream.LEDataInputStream;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
 public class VariantDictionary {
     private static final int VdVersion = 0x0100;
     private static final int VdmCritical = 0xFF00;
-    private static final int VdmInfo = 0x00FF;
 
-    private Map<String, Object> dict = new HashMap<String, Object>();
+    private Map<String, Object> dict = new HashMap<>();
 
     private enum VdType {
         None(0x00),
@@ -69,19 +67,19 @@ public class VariantDictionary {
     }
     public long getUInt64(String name) { return (long)dict.get(name); }
 
-    public void setBool(String name, boolean value) {
+    private void setBool(String name, boolean value) {
         dict.put(name, value);
     }
 
-    public void setInt32(String name, int value) {
+    private void setInt32(String name, int value) {
         dict.put(name, value);
     }
 
-    public void setInt64(String name, long value) {
+    private void setInt64(String name, long value) {
         dict.put(name, value);
     }
 
-    public void setString(String name, String value) {
+    private void setString(String name, String value) {
         dict.put(name, value);
     }
 
@@ -90,7 +88,7 @@ public class VariantDictionary {
     }
     public byte[] getByteArray(String name) { return (byte[])dict.get(name); }
 
-    public static VariantDictionary deserialize(LEDataInputStream lis) throws IOException {
+    protected static VariantDictionary deserialize(LEDataInputStream lis) throws IOException {
         VariantDictionary d = new VariantDictionary();
 
         int version = lis.readUShort();
@@ -154,14 +152,14 @@ public class VariantDictionary {
                 d.setByteArray(name, valueBuf);
             }
             else {
-                assert(false);
+                assert false;
             }
         }
 
         return d;
     }
 
-    public void copyTo(VariantDictionary d) {
+    protected void copyTo(VariantDictionary d) {
        for (Map.Entry<String, Object> entry : d.dict.entrySet()) {
            String key = entry.getKey();
            Object value = entry.getValue();

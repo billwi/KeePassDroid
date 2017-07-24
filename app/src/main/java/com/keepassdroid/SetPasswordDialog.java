@@ -43,7 +43,7 @@ public class SetPasswordDialog extends CancelDialog {
 	private Uri mKeyfile;
 	private FileOnFinish mFinish;
 		
-	public SetPasswordDialog(Context context) {
+	SetPasswordDialog(Context context) {
 		super(context);
 	}
 	
@@ -128,7 +128,7 @@ public class SetPasswordDialog extends CancelDialog {
 	private class AfterSave extends OnFinish {
 		private FileOnFinish mFinish;
 		
-		public AfterSave(FileOnFinish finish, Handler handler) {
+		AfterSave(FileOnFinish finish, Handler handler) {
 			super(finish, handler);
 			mFinish = finish;
 		}

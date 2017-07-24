@@ -19,19 +19,6 @@
  */
 package com.keepassdroid;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.SyncFailedException;
-import java.util.HashSet;
-import java.util.Set;
-
-import android.content.ContentResolver;
 import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
@@ -49,16 +36,27 @@ import com.keepassdroid.icons.DrawableFactory;
 import com.keepassdroid.search.SearchDbHelper;
 import com.keepassdroid.utils.UriUtil;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.SyncFailedException;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * @author bpellin
  */
 public class Database {
-    public Set<PwGroup> dirty = new HashSet<PwGroup>();
+    public Set<PwGroup> dirty = new HashSet<>();
     public PwDatabase pm;
     public Uri mUri;
-    public SearchDbHelper searchHelper;
+    private SearchDbHelper searchHelper;
     public boolean readOnly = false;
-    public boolean passwordEncodingError = false;
+    boolean passwordEncodingError = false;
 
     public DrawableFactory drawFactory = new DrawableFactory();
 
@@ -113,7 +111,7 @@ public class Database {
         LoadData(ctx, is, password, kfIs, new UpdateStatus(), debug);
     }
 
-    public void LoadData(Context ctx, InputStream is, String password, InputStream kfIs, UpdateStatus status, boolean debug) throws IOException, InvalidDBException {
+    private void LoadData(Context ctx, InputStream is, String password, InputStream kfIs, UpdateStatus status, boolean debug) throws IOException, InvalidDBException {
         BufferedInputStream bis = new BufferedInputStream(is);
 
         if ( ! bis.markSupported() ) {
@@ -136,7 +134,7 @@ public class Database {
         loaded = true;
     }
 
-    public void LoadData(Context ctx, PwDatabase pm, String password, InputStream keyInputStream, UpdateStatus status) {
+    private void LoadData(Context ctx, PwDatabase pm, String password, InputStream keyInputStream, UpdateStatus status) {
         if ( pm != null ) {
             passwordEncodingError = !pm.validatePasswordEncoding(password);
         }
@@ -153,7 +151,7 @@ public class Database {
         SaveData(ctx, mUri);
     }
 
-    public void SaveData(Context ctx, Uri uri) throws IOException, PwDbOutputException {
+    private void SaveData(Context ctx, Uri uri) throws IOException, PwDbOutputException {
         if (uri.getScheme().equals("file")) {
             String filename = uri.getPath();
             File tempFile = new File(filename + ".tmp");
@@ -162,6 +160,7 @@ public class Database {
 
             //PwDbV3Output pmo = new PwDbV3Output(pm, bos, App.getCalendar());
             PwDbOutput pmo = PwDbOutput.getInstance(pm, fos);
+            assert pmo != null;
             pmo.output();
             //bos.flush();
             //bos.close();
@@ -189,7 +188,9 @@ public class Database {
             }
 
             PwDbOutput pmo = PwDbOutput.getInstance(pm, os);
+            assert pmo != null;
             pmo.output();
+            assert os != null;
             os.close();
         }
         mUri = uri;
@@ -205,7 +206,7 @@ public class Database {
         passwordEncodingError = false;
     }
 
-    public void markAllGroupsAsDirty() {
+    void markAllGroupsAsDirty() {
         for ( PwGroup group : pm.getGroups() ) {
             dirty.add(group);
         }

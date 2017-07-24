@@ -28,7 +28,7 @@ public class ActivityCompat {
 	
 	static {
 		try {
-			invalidateOptMenu = Activity.class.getMethod("invalidateOptionsMenu", (Class<Activity>[]) null);
+			invalidateOptMenu = Activity.class.getMethod("invalidateOptionsMenu", (Class<?>[]) null);
 		} catch (Exception e) {
 			// Do nothing if method dosen't exist
 		}

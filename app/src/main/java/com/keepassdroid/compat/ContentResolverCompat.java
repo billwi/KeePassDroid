@@ -32,7 +32,7 @@ public class ContentResolverCompat {
     static {
         try {
             contentResolver = ContentResolver.class;
-            takePersistableUriPermission = contentResolver.getMethod("takePersistableUriPermission", new Class[]{Uri.class, int.class});
+            takePersistableUriPermission = contentResolver.getMethod("takePersistableUriPermission", Uri.class, int.class);
 
             available = true;
         } catch (Exception e) {
@@ -43,7 +43,7 @@ public class ContentResolverCompat {
     public static void takePersistableUriPermission(ContentResolver resolver, Uri uri, int modeFlags) {
         if (available) {
             try {
-                takePersistableUriPermission.invoke(resolver, new Object[]{uri, modeFlags});
+                takePersistableUriPermission.invoke(resolver, uri, modeFlags);
             } catch (Exception e) {
                 // Fail silently
             }

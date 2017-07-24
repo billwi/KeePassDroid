@@ -70,7 +70,7 @@ public class PwGroupListAdapter extends BaseAdapter {
 	}
 
 	private void filterAndSort() {
-		entriesForViewing = new ArrayList<PwEntry>();
+		entriesForViewing = new ArrayList<>();
 		
 		for (int i = 0; i < mGroup.childEntries.size(); i++) {
 			PwEntry entry = mGroup.childEntries.get(i);
@@ -81,7 +81,7 @@ public class PwGroupListAdapter extends BaseAdapter {
 		
 		boolean sortLists = prefs.getBoolean(mAct.getString(R.string.sort_key),	mAct.getResources().getBoolean(R.bool.sort_default)); 
 		if ( sortLists ) {
-			groupsForViewing = new ArrayList<PwGroup>(mGroup.childGroups);
+			groupsForViewing = new ArrayList<>(mGroup.childGroups);
 			
 			Collections.sort(entriesForViewing, entryComp);
 			Collections.sort(groupsForViewing, groupComp);

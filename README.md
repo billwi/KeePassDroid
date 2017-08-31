@@ -1,4 +1,4 @@
-# keepassdroid
+# KeePassDroid
 A fork of the popular [KeePassDroid](https://github.com/bpellin/keepassdroid) for Android
 
 ## Improvements

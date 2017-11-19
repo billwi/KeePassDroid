@@ -35,7 +35,11 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+<<<<<<< HEAD
 import android.support.v7.app.NotificationCompat;
+=======
+import android.support.v4.app.NotificationCompat;
+>>>>>>> upstream/master
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.method.PasswordTransformationMethod;
@@ -214,6 +218,25 @@ public class EntryActivity extends LockCloseHideActivity {
 		
 		super.onDestroy();
 	}
+<<<<<<< HEAD
+=======
+
+	private Notification getNotification(String intentText, int descResId) {
+		String desc = getString(descResId);
+
+		Intent intent = new Intent(intentText);
+		PendingIntent pending = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+		// no longer supported for api level >22
+		// notify.setLatestEventInfo(this, getString(R.string.app_name), desc, pending);
+		// so instead using compat builder and create new notification
+		NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+		Notification notify = builder.setContentIntent(pending).setContentText(desc).setContentTitle(getString(R.string.app_name))
+				.setSmallIcon(R.drawable.notify).setTicker(desc).setWhen(System.currentTimeMillis()).build();
+
+		return notify;
+	}
+>>>>>>> upstream/master
 	
 	private String getDateTime(Date dt) {
 		return dateFormat.format(dt) + " " + timeFormat.format(dt);

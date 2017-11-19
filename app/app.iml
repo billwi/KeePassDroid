@@ -53,8 +53,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src/flavor1Debug/jni" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/flavor1Debug/rs" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/flavor1Debug/shaders" isTestSource="false" />
-<<<<<<< HEAD
-=======
       <sourceFolder url="file://$MODULE_DIR$/build/generated/source/apt/androidTest/flavor1/debug" isTestSource="true" generated="true" />
       <sourceFolder url="file://$MODULE_DIR$/build/generated/source/r/androidTest/flavor1/debug" isTestSource="true" generated="true" />
       <sourceFolder url="file://$MODULE_DIR$/build/generated/source/aidl/androidTest/flavor1/debug" isTestSource="true" generated="true" />
@@ -71,7 +69,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestFlavor1Debug/rs" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestFlavor1Debug/shaders" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/build/generated/source/apt/test/flavor1/debug" isTestSource="true" generated="true" />
->>>>>>> upstream/master
       <sourceFolder url="file://$MODULE_DIR$/src/testFlavor1Debug/res" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/testFlavor1Debug/resources" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/testFlavor1Debug/assets" type="java-test-resource" />

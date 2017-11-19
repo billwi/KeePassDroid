@@ -35,11 +35,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-<<<<<<< HEAD
 import android.support.v7.app.NotificationCompat;
-=======
-import android.support.v4.app.NotificationCompat;
->>>>>>> upstream/master
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.method.PasswordTransformationMethod;

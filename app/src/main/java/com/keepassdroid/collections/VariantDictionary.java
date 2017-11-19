@@ -23,11 +23,8 @@ import com.keepassdroid.stream.LEDataInputStream;
 import com.keepassdroid.stream.LEDataOutputStream;
 
 import java.io.IOException;
-<<<<<<< HEAD
-=======
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
->>>>>>> upstream/master
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,11 +32,7 @@ public class VariantDictionary {
     private static final int VdVersion = 0x0100;
     private static final int VdmCritical = 0xFF00;
 
-<<<<<<< HEAD
-    private Map<String, Object> dict = new HashMap<>();
-=======
     private Map<String, VdType> dict = new HashMap<String, VdType>();
->>>>>>> upstream/master
 
     private class VdType {
         public static final byte None = 0x00;
@@ -73,23 +66,6 @@ public class VariantDictionary {
         dict.put(name, new VdType(type, value));
     }
 
-<<<<<<< HEAD
-    private void setBool(String name, boolean value) {
-        dict.put(name, value);
-    }
-
-    private void setInt32(String name, int value) {
-        dict.put(name, value);
-    }
-
-    private void setInt64(String name, long value) {
-        dict.put(name, value);
-    }
-
-    private void setString(String name, String value) {
-        dict.put(name, value);
-    }
-=======
     public void setUInt32(String name, long value) { putType(VdType.UInt32, name, value); }
     public long getUInt32(String name) { return (long)dict.get(name).value; }
 
@@ -101,7 +77,6 @@ public class VariantDictionary {
 
     public void setInt32(String name, int value) { putType(VdType.Int32 ,name, value); }
     public int getInt32(String name) { return (int)dict.get(name).value; }
->>>>>>> upstream/master
 
     public void setInt64(String name, long value) { putType(VdType.Int64 ,name, value); }
     public long getInt64(String name) { return (long)dict.get(name).value; }
@@ -180,16 +155,6 @@ public class VariantDictionary {
                     assert (false);
                     break;
             }
-<<<<<<< HEAD
-            else if (VdType.String.equals(bType)) {
-                d.setString(name, new String(valueBuf, "UTF-8"));
-            }
-            else if (VdType.ByteArray.equals(bType)) {
-                d.setByteArray(name, valueBuf);
-            }
-            else {
-                assert false;
-=======
         }
 
         return d;
@@ -256,7 +221,6 @@ public class VariantDictionary {
                 default:
                     assert(false);
                     break;
->>>>>>> upstream/master
             }
         }
 
@@ -264,13 +228,8 @@ public class VariantDictionary {
 
     }
 
-<<<<<<< HEAD
-    protected void copyTo(VariantDictionary d) {
-       for (Map.Entry<String, Object> entry : d.dict.entrySet()) {
-=======
     public void copyTo(VariantDictionary d) {
        for (Map.Entry<String, VdType> entry : d.dict.entrySet()) {
->>>>>>> upstream/master
            String key = entry.getKey();
            VdType value = entry.getValue();
 

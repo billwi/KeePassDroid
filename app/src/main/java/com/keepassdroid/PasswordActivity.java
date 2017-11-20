@@ -19,6 +19,7 @@
  */
 package com.keepassdroid;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -198,7 +199,7 @@ public class PasswordActivity extends LockingActivity implements FingerPrintHelp
         prefsNoBackup = getSharedPreferences("nobackup", Context.MODE_PRIVATE);
         prefsNoBackup.edit()
                 .putString("test", "test")
-                .commit();
+                .apply();
 
 
         mRememberKeyfile = prefs.getBoolean(getString(R.string.keyfile_key), getResources().getBoolean(R.bool.keyfile_default));
@@ -419,7 +420,7 @@ public class PasswordActivity extends LockingActivity implements FingerPrintHelp
         else if (!fingerPrintHelper.hasEnrolledFingerprints()) {
 
             setFingerPrintVisibilty(View.VISIBLE);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            if (Build.VERSION_CODES.HONEYCOMB <= Build.VERSION.SDK_INT) {
                 fingerprintView.setAlpha(0.3f);
             }
             // This happens when no fingerprints are registered. Listening won't start
@@ -429,9 +430,7 @@ public class PasswordActivity extends LockingActivity implements FingerPrintHelp
         else {
 
             setFingerPrintVisibilty(View.VISIBLE);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                fingerprintView.setAlpha(1f);
-            }
+            fingerprintView.setAlpha(1f);
             // fingerprint available but no stored password found yet for this DB so show info don't listen
             if (prefsNoBackup.getString(getPreferenceKeyValue(), null) == null) {
 
@@ -455,7 +454,7 @@ public class PasswordActivity extends LockingActivity implements FingerPrintHelp
         prefsNoBackup.edit()
                 .putString(getPreferenceKeyValue(), value)
                 .putString(getPreferenceKeyIvSpec(), ivSpec)
-                .commit();
+                .apply();
         // and remove visual input to reset UI
         confirmButton.performClick();
         confirmationView.setText(R.string.encrypted_value_stored);
@@ -560,9 +559,6 @@ public class PasswordActivity extends LockingActivity implements FingerPrintHelp
         TextView te = (TextView) findViewById(resId);
         assert (te == null);
 
-        if (te != null) {
-            te.setText(str);
-        }
     }
 
     @Override
@@ -595,7 +591,7 @@ public class PasswordActivity extends LockingActivity implements FingerPrintHelp
 
         private Database db;
 
-        public AfterLoad(
+        AfterLoad(
                 Handler handler,
                 Database db) {
             super(handler);
@@ -625,6 +621,7 @@ public class PasswordActivity extends LockingActivity implements FingerPrintHelp
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class InitTask extends AsyncTask<Intent, Void, Integer> {
 
         String password = "";
@@ -634,7 +631,7 @@ public class PasswordActivity extends LockingActivity implements FingerPrintHelp
         protected Integer doInBackground(Intent... args) {
             Intent i = args[0];
             String action = i.getAction();
-            ;
+
             if (action != null && action.equals(VIEW_INTENT)) {
                 Uri incoming = i.getData();
                 mDbUri = incoming;

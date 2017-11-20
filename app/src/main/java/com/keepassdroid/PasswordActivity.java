@@ -28,6 +28,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -143,26 +144,6 @@ public class PasswordActivity extends LockingActivity implements FingerPrintHelp
 
         switch (requestCode) {
 
-<<<<<<< HEAD
-        case KeePass.EXIT_NORMAL:
-            setEditText(R.id.password);
-            App.getDB().clear();
-            break;
-
-        case KeePass.EXIT_LOCK:
-            setResult(KeePass.EXIT_LOCK);
-            setEditText(R.id.password);
-            finish();
-            App.getDB().clear();
-            break;
-        case FILE_BROWSE:
-            if (resultCode == RESULT_OK) {
-                String filename = data.getDataString();
-                if (filename != null) {
-                    EditText fn = (EditText) findViewById(R.id.pass_keyfile);
-                    fn.setText(filename);
-                    mKeyUri = UriUtil.parseDefaultFile(filename);
-=======
             case KeePass.EXIT_NORMAL:
                 setEditText(R.id.password, "");
                 App.getDB().clear();
@@ -182,7 +163,6 @@ public class PasswordActivity extends LockingActivity implements FingerPrintHelp
                         fn.setText(filename);
                         mKeyUri = UriUtil.parseDefaultFile(filename);
                     }
->>>>>>> upstream/master
                 }
                 break;
             case GET_CONTENT:
@@ -271,10 +251,10 @@ public class PasswordActivity extends LockingActivity implements FingerPrintHelp
 
     private void populateView() {
         String db = (mDbUri == null) ? "" : mDbUri.toString();
-        setEditText(R.id.filename);
+        setEditText(R.id.filename, db);
 
         String key = (mKeyUri == null) ? "" : mKeyUri.toString();
-        setEditText(R.id.pass_keyfile);
+        setEditText(R.id.pass_keyfile, key);
     }
 
     /*
@@ -574,11 +554,6 @@ public class PasswordActivity extends LockingActivity implements FingerPrintHelp
         return Util.getEditText(this, resId);
     }
 
-<<<<<<< HEAD
-    private void setEditText(int resId) {
-        TextView te =  (TextView) findViewById(resId);
-        assert te == null;
-=======
     private void setEditText(
             int resId,
             String str) {
@@ -588,7 +563,6 @@ public class PasswordActivity extends LockingActivity implements FingerPrintHelp
         if (te != null) {
             te.setText(str);
         }
->>>>>>> upstream/master
     }
 
     @Override
@@ -621,13 +595,9 @@ public class PasswordActivity extends LockingActivity implements FingerPrintHelp
 
         private Database db;
 
-<<<<<<< HEAD
-        AfterLoad(Handler handler, Database db) {
-=======
         public AfterLoad(
                 Handler handler,
                 Database db) {
->>>>>>> upstream/master
             super(handler);
 
             this.db = db;
@@ -664,12 +634,8 @@ public class PasswordActivity extends LockingActivity implements FingerPrintHelp
         protected Integer doInBackground(Intent... args) {
             Intent i = args[0];
             String action = i.getAction();
-<<<<<<< HEAD
-            if ( action != null && action.equals(VIEW_INTENT) ) {
-=======
             ;
             if (action != null && action.equals(VIEW_INTENT)) {
->>>>>>> upstream/master
                 Uri incoming = i.getData();
                 mDbUri = incoming;
 

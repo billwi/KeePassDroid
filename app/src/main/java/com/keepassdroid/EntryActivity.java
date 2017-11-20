@@ -214,8 +214,6 @@ public class EntryActivity extends LockCloseHideActivity {
 		
 		super.onDestroy();
 	}
-<<<<<<< HEAD
-=======
 
 	private Notification getNotification(String intentText, int descResId) {
 		String desc = getString(descResId);
@@ -232,7 +230,6 @@ public class EntryActivity extends LockCloseHideActivity {
 
 		return notify;
 	}
->>>>>>> upstream/master
 	
 	private String getDateTime(Date dt) {
 		return dateFormat.format(dt) + " " + timeFormat.format(dt);
